@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chai Pe Charcha | Nostalgic Sips</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Poppins:wght@300;400;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --chai-gold: #d4a373;
+            --chai-tea: #c18b5a;
+            --chai-dark: #432818;
+            --accent: #e76f51;
+            --glass: rgba(255, 255, 255, 0.08);
+            --bg: #12100e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: #f1e3d3;
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Cinematic Background */
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1599390192407-6a1529be9752?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: sepia(30%) contrast(1.1);
+            z-index: -2;
+        }
+
+        .film-grain {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: -1;
+            animation: grain 1s steps(10) infinite;
+        }
+
+        @keyframes grain {
+            0%, 100% { transform:translate(0, 0) }
+            10% { transform:translate(-2%, -2%) }
+            40% { transform:translate(-5%, 5%) }
+            70% { transform:translate(5%, -5%) }
+        }
+
+        /* Entrance Overlay */
+        #entrance-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease, visibility 1s;
+        }
+
+        .start-btn {
+            background: none;
+            border: 1px solid var(--chai-gold);
+            color: var(--chai-gold);
+            padding: 15px 40px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.4s;
+            letter-spacing: 2px;
+        }
+
+        .start-btn:hover {
+            background: var(--chai-gold);
+            color: var(--chai-dark);
+            box-shadow: 0 0 30px rgba(212, 163, 115, 0.4);
+        }
+
+        /* Title Area */
+        .header {
+            position: absolute;
+            top: 8vh;
+            text-align: center;
+            z-index: 5;
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 5.5rem);
+            color: var(--chai-gold);
+            line-height: 0.9;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-top: 10px;
+        }
+
+        /* Central Visual: The Glass */
+        .chai-container {
+            position: relative;
+            z-index: 2;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .chai-container:active { transform: scale(0.95); }
+
+        .cutting-glass {
+            width: 110px;
+            height: 170px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 15% 100%);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .tea-liquid {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(to top, var(--chai-dark), var(--chai-tea));
+            box-shadow: inset 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        .steam-wrap {
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+        }
+
+        .steam {
+            width: 8px;
+            height: 40px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            filter: blur(6px);
+            animation: rise 3s infinite ease-out;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(60px) scale(1); opacity: 0; }
+            50% { opacity: 0.3; }
+            100% { transform: translateY(-40px) scale(2.5); opacity: 0; }
+        }
+
+        /* Memories & Slang Labels */
+        .slang {
+            position: absolute;
+            font-family: 'Caveat', cursive;
+            font-size: 1.4rem;
+            color: var(--chai-gold);
+            white-space: nowrap;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        /* Quotes */
+        .quotes-container {
+            position: absolute;
+            bottom: 25vh;
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.3rem;
+            color: #d1c4b9;
+        }
+
+        #quote-text {
+            transition: opacity 0.8s ease;
+        }
+
+        /* Glassmorphism Player */
+        .player-bar {
+            position: fixed;
+            bottom: 40px;
+            width: 90%;
+            max-width: 500px;
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 100;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .controls { display: flex; gap: 15px; }
+
+        .btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .btn:hover { color: var(--chai-gold); transform: scale(1.1); }
+        .btn svg { width: 22px; height: 22px; fill: currentColor; }
+
+        .track-info { flex: 1; overflow: hidden; }
+
+        .track-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--chai-gold);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+
+        .progress-bg {
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress-fill {
+            position: absolute;
+            height: 100%;
+            background: var(--chai-gold);
+            width: 0%;
+            border-radius: 2px;
+        }
+
+        /* Visual Feedback */
+        .clink-flash {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 10px; height: 10px;
+            background: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            opacity: 0;
+            z-index: 2000;
+        }
+
+        @keyframes flash-anim {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            100% { transform: translate(-50%, -50%) scale(50); opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .title { font-size: 3rem; }
+            .player-bar { padding: 12px 20px; }
+            .track-info { display: none; }
+            .slang { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="entrance-overlay">
+        <h1 class="title" style="margin-bottom: 20px; font-size: 2rem;">Chai Pe Charcha</h1>
+        <button class="start-btn" onclick="initExperience()">ENTER NOSTALGIA</button>
+    </div>
+
+    <div class="bg-overlay"></div>
+    <div class="film-grain"></div>
+    <div class="clink-flash" id="flash"></div>
+
+    <header class="header">
+        <h1 class="title">Chai Pe<br>Charcha</h1>
+        <p class="subtitle">A Playlist of Old Souls</p>
+    </header>
+
+    <div class="chai-container" id="chai-cup" onclick="clinkEffect()">
+        <div class="steam-wrap">
+            <div class="steam" style="animation-delay: 0s"></div>
+            <div class="steam" style="animation-delay: 1s"></div>
+            <div class="steam" style="animation-delay: 2s"></div>
+        </div>
+        <div class="cutting-glass">
+            <div class="tea-liquid"></div>
+        </div>
+        <!-- Nostalgic Markers -->
+        <span class="slang" style="top: -20px; left: -120px; transform: rotate(-10deg);">Ek cutting dena, boss!</span>
+        <span class="slang" style="bottom: 40px; right: -130px; transform: rotate(5deg); opacity: 0.4;">Adrak wali special...</span>
+        <span class="slang" style="top: 60px; right: -110px; transform: rotate(15deg);">Baatein aur yaadein.</span>
+    </div>
+
+    <div class="quotes-container">
+        <div id="quote-text">"Sips that start a thousand stories."</div>
+    </div>
+
+    <!-- Glassmorphism Player -->
+    <div class="player-bar">
+        <div class="controls">
+            <button class="btn" onclick="player.previousVideo()">
+                <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6L19 18V6z"/></svg>
+            </button>
+            <button class="btn" id="play-trigger" onclick="togglePlay()">
+                <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <button class="btn" onclick="player.nextVideo()">
+                <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
+        </div>
+        <div class="track-info">
+            <div class="track-name" id="track-name">Loading melodies...</div>
+            <div class="progress-bg" id="progress-container" onclick="seek(event)">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden YT Player -->
+    <div id="yt-player-element"></div>
+
+    <script>
+        let player;
+        const playlistId = 'PLVwbgC8mRDea4xoSwC0ZNMiIr8OHiaFog';
+
+        // 1. Initialize Experience (User Interaction)
+        function initExperience() {
+            document.getElementById('entrance-overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('entrance-overlay').style.visibility = 'hidden';
+            }, 1000);
+
+            // Load YouTube API
+            const tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            const firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        }
+
+        // 2. YouTube API Ready
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('yt-player-element', {
+                height: '0', width: '0',
+                playerVars: {
+                    listType: 'playlist',
+                    list: playlistId,
+                    autoplay: 1, // Will work now because of the button click
+                    controls: 0
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange,
+                    'onError': onPlayerError
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            updateTrackName();
+            setInterval(updateProgress, 1000);
+            // In case autoplay is still finicky
+            event.target.playVideo().catch && event.target.playVideo();
+        }
+
+        function onPlayerStateChange(event) {
+            const icon = document.getElementById('play-icon');
+            if (event.data == YT.PlayerState.PLAYING) {
+                icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                updateTrackName();
+            } else {
+                icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+            }
+        }
+
+        function onPlayerError(event) {
+            // 2=invalid param, 5=HTML5 error, 100=video not found/private,
+            // 101/150=owner disabled embedding
+            const messages = {
+                2: 'Invalid video/playlist ID.',
+                5: 'This video cannot be played in an embedded player.',
+                100: 'Playlist or video not found (it may be private or deleted).',
+                101: 'The video owner has disabled embedding.',
+                150: 'The video owner has disabled embedding.'
+            };
+            document.getElementById('track-name').innerText =
+                messages[event.data] || 'Playback error.';
+            console.error('YouTube player error code:', event.data);
+        }
+
+        function togglePlay() {
+            const state = player.getPlayerState();
+            if (state == YT.PlayerState.PLAYING) player.pauseVideo();
+            else player.playVideo();
+        }
+
+        function updateTrackName() {
+            const data = player.getVideoData();
+            if (data && data.title) {
+                document.getElementById('track-name').innerText = data.title;
+            }
+        }
+
+        function updateProgress() {
+            if (player && player.getCurrentTime) {
+                const perc = (player.getCurrentTime() / player.getDuration()) * 100;
+                document.getElementById('progress-bar').style.width = perc + '%';
+            }
+        }
+
+        function seek(e) {
+            const rect = document.getElementById('progress-container').getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            player.seekTo(pos * player.getDuration());
+        }
+
+        // 3. Interactions
+        function clinkEffect() {
+            // Visual Flash
+            const flash = document.getElementById('flash');
+            flash.style.animation = 'none';
+            flash.offsetHeight; /* trigger reflow */
+            flash.style.animation = 'flash-anim 0.6s ease-out';
+
+            // Audio Synthesis (Clink)
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1200, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.4);
+        }
+
+        // 4. Quote Rotator
+        const quotes = [
+            "Everything happens over a cup of tea.",
+            "Chai thandi ho rahi hai, aur baatein garam.",
+            "Sips that start a thousand stories.",
+            "Old radio hits, rain, and a glass of tea.",
+            "Sukoon = Adrak wali chai.",
+            "A lot can happen over a cutting chai."
+        ];
+        let qIdx = 0;
+        setInterval(() => {
+            const qEl = document.getElementById('quote-text');
+            qEl.style.opacity = 0;
+            setTimeout(() => {
+                qIdx = (qIdx + 1) % quotes.length;
+                qEl.innerText = `"${quotes[qIdx]}"`;
+                qEl.style.opacity = 1;
+            }, 800);
+        }, 5000);
+
+        // Keyboard Controls
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+        });
+    </script>
+</body>
+</html>
